@@ -1,10 +1,12 @@
 from classes import Hardware
 from classes import TimeKeeper as TK
+from parinya import LINE
 import schedule
 import smtplib
 import time
 import ssl
 
+line = LINE('mjTkdeP1Zx4OJF8XH469iha0dpzMbBRDea05AIIMO1J')
 # WATERING_TIME must be in "00:00:00 PM" format
 WATERING_TIME = '11:59:50 AM'
 SECONDS_TO_WATER = 10
@@ -20,32 +22,15 @@ EMAIL_MESSAGES = {
     }
 }
 
-def send_email(time_last_watered, subject, message):
-    port = 465
-    smtp_server = "smtp.gmail.com"
-    FROM = TO = "YOUR_EMAIL@gmail.com"
-    password = "YOUR_PASSWORD"
-
-    complete_message = ''
-    if time_last_watered == False:
-        complete_message = "Subject: {}\n\n{}".format(subject, message)
-    else:
-        complete_message = "Subject: {}\n\n{} {}".format(subject, message, time_last_watered)
-    
-    context = ssl.create_default_context()
-    with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
-        server.login(FROM, password)
-        server.sendmail(FROM, TO, complete_message)
-
 def send_last_watered_email(time_last_watered):
     message = EMAIL_MESSAGES['last_watered']['message']
     subject = EMAIL_MESSAGES['last_watered']['subject']
-    send_email(time_last_watered, subject, message)
+    line.sendtext(time_last_watered, subject, message)
 
 def send_check_water_level_email():
     message = EMAIL_MESSAGES['check_water_level']['message']
     subject = EMAIL_MESSAGES['check_water_level']['subject']
-    send_email(False, subject, message)
+    line.sendtext(False, subject, message)
 
 def water_plant(relay, seconds):
     relay.on()
