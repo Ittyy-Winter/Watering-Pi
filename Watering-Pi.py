@@ -1,12 +1,9 @@
 from classes import Hardware
 from classes import TimeKeeper as TK
-from parinya import LINE
 import schedule
 import smtplib
 import time
 import ssl
-
-line = LINE('mjTkdeP1Zx4OJF8XH469iha0dpzMbBRDea05AIIMO1J')
 # WATERING_TIME must be in "00:00:00 PM" format
 WATERING_TIME = '11:59:50 AM'
 SECONDS_TO_WATER = 10
@@ -25,12 +22,10 @@ EMAIL_MESSAGES = {
 def send_last_watered_email(time_last_watered):
     message = EMAIL_MESSAGES['last_watered']['message']
     subject = EMAIL_MESSAGES['last_watered']['subject']
-    line.sendtext(time_last_watered, subject, message)
 
 def send_check_water_level_email():
     message = EMAIL_MESSAGES['check_water_level']['message']
     subject = EMAIL_MESSAGES['check_water_level']['subject']
-    line.sendtext(False, subject, message)
 
 def water_plant(relay, seconds):
     relay.on()
